@@ -2,32 +2,26 @@
 
 namespace RentVehiclePool.Models
 {
-    public class Approval
+    public class ApprovalDetail
     {
         [Key]
+        [Display(Name = "Approval Detail ID")]
+        public int ApprovalDetailId { get; set; }
+
         [Required]
         [Display(Name = "Approval ID")]
         public int ApprovalId { get; set; }
 
-        // transaction ID
         [Required]
-        [Display(Name = "Transaction ID")]
-        public int TransactionId { get; set; }
+        [Display(Name = "Approval User ID")]
+        public int ApvUserId { get; set; }
 
         [Required]
-        [Display(Name = "Approval No")]
-        [StringLength(20)]
-        public string ApprovalNo { get; set; }
+        public int Level { get; set; }
 
         [Required]
-        [Display(Name = "Approval Levels")]
-        public int ApprovalLevels { get; set; } = 1;
-
-        [Required]
-        [StringLength(20)]
-        public string Status { get; set; }
-
-        public string? Remarks { get; set; }
+        [Display(Name = "Is Approved?")]
+        public bool? IsApproved { get; set; }
 
         [Required]
         [Display(Name = "Created Date")]
@@ -48,8 +42,8 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public Transaction Transaction { get; set; }
+        public Approval Approval { get; set; }
 
-        public ICollection<ApprovalDetail> ApprovalDetails { get; set; }
+        public User ApvUser { get; set; }
     }
 }

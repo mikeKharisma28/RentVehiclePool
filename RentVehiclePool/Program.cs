@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using RentVehiclePool.Data;
+
 namespace RentVehiclePool
 {
     public class Program
@@ -8,6 +11,10 @@ namespace RentVehiclePool
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<RentVehiclePoolContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+            );
 
             var app = builder.Build();
 
