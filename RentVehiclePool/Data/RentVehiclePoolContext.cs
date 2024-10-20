@@ -9,10 +9,9 @@ namespace RentVehiclePool.Data
         { 
         
         }
-
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<Roles> Roles { get; set; }
 
         public DbSet<Vehicle> Vehicles { get; set; }
 
@@ -25,116 +24,46 @@ namespace RentVehiclePool.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<Role>().ToTable("Roles");
             modelBuilder.Entity<Vehicle>().ToTable("Vehicles");
             modelBuilder.Entity<Transaction>().ToTable("Transactions");
             modelBuilder.Entity<Approval>().ToTable("Approvals");
             modelBuilder.Entity<ApprovalDetail>().ToTable("ApprovalDetails");
+
+            modelBuilder.Entity<Roles>().HasData(new Roles
+            {
+                RoleId = 1,
+                RoleName = "Admin",
+                IsActive = true,
+                Description = "Dapat melakukan transaksi untuk sewa / pengambilan kendaraan.",
+                CreatedBy = "EF Migration",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "EF Migration",
+                UpdatedDate = DateTime.Now
+            });
+
+            modelBuilder.Entity<Roles>().HasData(new Roles
+            {
+                RoleId = 2,
+                RoleName = "Approval 1",
+                IsActive = true,
+                Description = "Melakukan approval level 1",
+                CreatedBy = "EF Migration",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "EF Migration",
+                UpdatedDate = DateTime.Now
+            });
+
+            modelBuilder.Entity<Roles>().HasData(new Roles
+            {
+                RoleId = 3,
+                RoleName = "Approval 2",
+                IsActive = true,
+                Description = "Melakukan approval level 2",
+                CreatedBy = "EF Migration",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "EF Migration",
+                UpdatedDate = DateTime.Now
+            });
         }
-
-        //public override int SaveChanges()
-        //{
-        //    DateTime now = DateTime.Now;
-        //    AutoCreatedDate(now);
-        //    AutoUpdatedDate(now);
-
-        //    return base.SaveChanges();
-        //}
-
-        //private void AutoCreatedDate(DateTime time)
-        //{
-        //    foreach (var entity in ChangeTracker.Entries<User>()
-        //            .Where(e => e.State == EntityState.Added)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.CreatedDate = time;
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Role>()
-        //            .Where(e => e.State == EntityState.Added)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.CreatedDate = time;
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Vehicle>()
-        //            .Where(e => e.State == EntityState.Added)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.CreatedDate = time;
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Transaction>()
-        //            .Where(e => e.State == EntityState.Added)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.CreatedDate = time;
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Approval>()
-        //            .Where(e => e.State == EntityState.Added)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.CreatedDate = time;
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<ApprovalDetail>()
-        //            .Where(e => e.State == EntityState.Added)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.CreatedDate = time;
-        //        entity.UpdatedDate = time;
-        //    }
-        //}
-
-        //private void AutoUpdatedDate(DateTime time)
-        //{
-        //    foreach (var entity in ChangeTracker.Entries<User>()
-        //            .Where(e => e.State == EntityState.Modified)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Role>()
-        //            .Where(e => e.State == EntityState.Modified)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Vehicle>()
-        //            .Where(e => e.State == EntityState.Modified)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Transaction>()
-        //            .Where(e => e.State == EntityState.Modified)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<Approval>()
-        //            .Where(e => e.State == EntityState.Modified)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.UpdatedDate = time;
-        //    }
-
-        //    foreach (var entity in ChangeTracker.Entries<ApprovalDetail>()
-        //            .Where(e => e.State == EntityState.Modified)
-        //            .Select(e => e.Entity))
-        //    {
-        //        entity.UpdatedDate = time;
-        //    }
-        //}
     }
 }

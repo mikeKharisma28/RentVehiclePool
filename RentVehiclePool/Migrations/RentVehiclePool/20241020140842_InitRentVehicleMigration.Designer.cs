@@ -9,11 +9,11 @@ using RentVehiclePool.Data;
 
 #nullable disable
 
-namespace RentVehiclePool.Migrations
+namespace RentVehiclePool.Migrations.RentVehiclePool
 {
     [DbContext(typeof(RentVehiclePoolContext))]
-    [Migration("20241020064515_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241020140842_InitRentVehicleMigration")]
+    partial class InitRentVehicleMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,8 +86,8 @@ namespace RentVehiclePool.Migrations
                     b.Property<int>("ApprovalId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ApvUserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApvUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -119,7 +119,7 @@ namespace RentVehiclePool.Migrations
                     b.ToTable("ApprovalDetails", (string)null);
                 });
 
-            modelBuilder.Entity("RentVehiclePool.Models.Role", b =>
+            modelBuilder.Entity("RentVehiclePool.Models.Roles", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -156,7 +156,42 @@ namespace RentVehiclePool.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            CreatedBy = "EF Migration",
+                            CreatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(29),
+                            Description = "Dapat melakukan transaksi untuk sewa / pengambilan kendaraan.",
+                            IsActive = true,
+                            RoleName = "Admin",
+                            UpdatedBy = "EF Migration",
+                            UpdatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(38)
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            CreatedBy = "EF Migration",
+                            CreatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(53),
+                            Description = "Melakukan approval level 1",
+                            IsActive = true,
+                            RoleName = "Approval 1",
+                            UpdatedBy = "EF Migration",
+                            UpdatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(54)
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            CreatedBy = "EF Migration",
+                            CreatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(61),
+                            Description = "Melakukan approval level 2",
+                            IsActive = true,
+                            RoleName = "Approval 2",
+                            UpdatedBy = "EF Migration",
+                            UpdatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(61)
+                        });
                 });
 
             modelBuilder.Entity("RentVehiclePool.Models.Transaction", b =>
@@ -224,11 +259,15 @@ namespace RentVehiclePool.Migrations
 
             modelBuilder.Entity("RentVehiclePool.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -238,26 +277,52 @@ namespace RentVehiclePool.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("MiddleName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
@@ -267,10 +332,8 @@ namespace RentVehiclePool.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserLogin")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
@@ -367,7 +430,7 @@ namespace RentVehiclePool.Migrations
 
             modelBuilder.Entity("RentVehiclePool.Models.User", b =>
                 {
-                    b.HasOne("RentVehiclePool.Models.Role", "Role")
+                    b.HasOne("RentVehiclePool.Models.Roles", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

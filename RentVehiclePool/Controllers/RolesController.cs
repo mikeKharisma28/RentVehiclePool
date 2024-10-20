@@ -56,7 +56,7 @@ namespace RentVehiclePool.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoleId,RoleName,Description,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Role role)
+        public async Task<IActionResult> Create([Bind("RoleId,RoleName,Description,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Roles role)
         {
             DateTime now = DateTime.Now;
             role.CreatedDate = now;
@@ -91,7 +91,7 @@ namespace RentVehiclePool.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleName,Description,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Role role)
+        public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleName,Description,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Roles role)
         {
             DateTime now = DateTime.Now;
             role.UpdatedDate = now;

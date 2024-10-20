@@ -1,31 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace RentVehiclePool.Models
 {
-    public class User
+    public class User : IdentityUser
     {
         [Key]
         [Display(Name = "User ID")]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; } = Guid.NewGuid();
 
         [Required]
-        [Display(Name = "User Login")]
-        [StringLength(10)]
-        public string UserLogin { get; set; }
-
-        [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "Full Name")]
         [StringLength(50)]
-        public string FirstName { get; set; }
-
-        [Display(Name = "Middle Name")]
-        [StringLength(50)]
-        public string? MiddleName { get; set; }
-
-        [Required]
-        [Display(Name = "Last Name")]
-        [StringLength(50)]
-        public string LastName { get; set; }
+        public string FullName { get; set; }
 
         // roleID
         [Required]
@@ -55,7 +42,7 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public Role? Role { get; set; }
+        public Roles? Role { get; set; }
 
         //public ICollection<ApprovalDetail> ApprovalDetails { get; set; }
     }

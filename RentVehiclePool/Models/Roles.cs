@@ -2,7 +2,7 @@
 
 namespace RentVehiclePool.Models
 {
-    public class Role
+    public class Roles
     {
         [Key]
         [Display(Name = "Role ID")]

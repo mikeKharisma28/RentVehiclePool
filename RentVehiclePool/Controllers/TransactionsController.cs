@@ -13,10 +13,12 @@ namespace RentVehiclePool.Controllers
     public class TransactionsController : Controller
     {
         private readonly RentVehiclePoolContext _context;
+        private readonly AccountContext _accountContext;
 
-        public TransactionsController(RentVehiclePoolContext context)
+        public TransactionsController(RentVehiclePoolContext context, AccountContext accountContext)
         {
             _context = context;
+            _accountContext = accountContext;
         }
 
         // GET: Transactions
@@ -48,6 +50,9 @@ namespace RentVehiclePool.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
+            User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
+
+            ViewData["CurrentUser"] = user.FullName;
             ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
             {
                 VehicleId = x.VehicleId,
@@ -63,13 +68,48 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TransactionId,VehicleId,TransactionNo,TransactionType,Description,DriverName,Status,UsedDate,ReturnedDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Transaction transaction)
         {
-            DateTime now = DateTime.Now;
-            transaction.CreatedDate = now;
-            transaction.UpdatedDate = now;
+            
+
             if (ModelState.IsValid)
             {
+                User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
+
+                // Update timestamps and user login
+                transaction.CreatedDate = DateTime.Now;
+                transaction.UpdatedDate = DateTime.Now;
+                transaction.CreatedBy = user.FullName;
+                transaction.UpdatedBy = user.FullName;
+                //transaction.UsedDate = DateTime.Now;
+
+                Approval approval = new Approval()
+                {
+                    ApprovalLevels = 2,
+                    Remarks = "",
+                    Status = "New Request",
+                    ApprovalNo = "X-TESTING",
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
+                    CreatedBy = user.FullName,
+                    UpdatedBy = user.FullName
+                };
+                transaction.Approval = approval;
+
+                ApprovalDetail approvalDetail = new ApprovalDetail()
+                {
+                    ApvUserId = user.UserId,
+                    Level = 1,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
+                    CreatedBy = user.FullName,
+                    UpdatedBy = user.FullName
+                };
+                ICollection<ApprovalDetail> approvalDetails = new ApprovalDetail[] { approvalDetail };
+                approval.ApprovalDetails = approvalDetails;
+
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
+                //InsertApprovalData(transaction.TransactionId, transaction.CreatedBy, user.UserId);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
@@ -184,6 +224,49 @@ namespace RentVehiclePool.Controllers
         private bool TransactionExists(int id)
         {
           return (_context.Transactions?.Any(e => e.TransactionId == id)).GetValueOrDefault();
+        }
+
+        private async Task UpdateVehicleUsageStatus(int vehicleId, User user, bool isUsed)
+        {
+            // Update vehicle being used
+            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(x => x.VehicleId == vehicleId);
+            vehicle.IsUsed = true;
+            vehicle.UpdatedDate = DateTime.Now;
+            vehicle.UpdatedBy = user.FullName;
+
+            _context.Update(vehicle);
+            await _context.SaveChangesAsync();
+        }
+
+        private void InsertApprovalData(int transactionId, string currentUser, Guid currentUserId)
+        {
+            // Add approval data
+            Approval approval = new Approval()
+            {
+                ApprovalLevels = 2,
+                Remarks = "",
+                Status = "New Request",
+                ApprovalNo = "X-TESTING",
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                CreatedBy = currentUser,
+                UpdatedBy = currentUser,
+                TransactionId = transactionId,
+            };
+
+            ApprovalDetail approvalDetail = new ApprovalDetail()
+            {
+                ApvUserId = currentUserId,
+                Level = 1,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                CreatedBy = currentUser,
+                UpdatedBy = currentUser
+            };
+
+            approval.ApprovalDetails.Add(approvalDetail);
+            _context.Add(approval);
+            _context.SaveChanges();
         }
     }
 }

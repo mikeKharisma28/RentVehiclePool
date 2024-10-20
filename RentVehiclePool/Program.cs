@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RentVehiclePool.Data;
+using RentVehiclePool.Models;
+using System;
 
 namespace RentVehiclePool
 {
@@ -15,6 +18,23 @@ namespace RentVehiclePool
             builder.Services.AddDbContext<RentVehiclePoolContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
             );
+
+            // For Login, Register, and Change Password
+            builder.Services.AddDbContext<AccountContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+            );
+
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+            }).AddEntityFrameworkStores<AccountContext>().AddDefaultTokenProviders();
 
             var app = builder.Build();
 

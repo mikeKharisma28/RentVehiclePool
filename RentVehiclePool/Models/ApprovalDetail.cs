@@ -14,12 +14,11 @@ namespace RentVehiclePool.Models
 
         [Required]
         [Display(Name = "Approval User ID")]
-        public int ApvUserId { get; set; }
+        public Guid ApvUserId { get; set; }
 
         [Required]
         public int Level { get; set; }
 
-        [Required]
         [Display(Name = "Is Approved?")]
         public bool? IsApproved { get; set; }
 

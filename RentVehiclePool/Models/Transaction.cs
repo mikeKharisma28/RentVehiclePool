@@ -41,6 +41,7 @@ namespace RentVehiclePool.Models
         [Required]
         [Display(Name = "Date Returned")]
         public DateTime ReturnedDate { get; set; }
+
         [Required]
         [Display(Name = "Created Date")]
         public DateTime CreatedDate { get; set; }
@@ -60,6 +61,8 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public Vehicle Vehicle { get; set; }
+        public Vehicle? Vehicle { get; set; }
+
+        public Approval? Approval { get; set; }
     }
 }
