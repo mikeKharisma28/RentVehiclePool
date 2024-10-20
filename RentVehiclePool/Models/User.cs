@@ -5,7 +5,6 @@ namespace RentVehiclePool.Models
 {
     public class User : IdentityUser
     {
-        [Key]
         [Display(Name = "User ID")]
         public Guid UserId { get; set; } = Guid.NewGuid();
 

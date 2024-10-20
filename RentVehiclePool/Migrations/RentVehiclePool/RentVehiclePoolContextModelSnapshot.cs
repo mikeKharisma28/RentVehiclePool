@@ -10,7 +10,7 @@ using RentVehiclePool.Data;
 
 namespace RentVehiclePool.Migrations.RentVehiclePool
 {
-    [DbContext(typeof(RentVehiclePoolContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class RentVehiclePoolContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

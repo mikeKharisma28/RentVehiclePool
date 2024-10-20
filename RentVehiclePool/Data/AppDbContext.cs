@@ -3,9 +3,9 @@ using RentVehiclePool.Models;
 
 namespace RentVehiclePool.Data
 {
-    public class RentVehiclePoolContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public RentVehiclePoolContext(DbContextOptions<RentVehiclePoolContext> options) : base(options) 
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         { 
         
         }

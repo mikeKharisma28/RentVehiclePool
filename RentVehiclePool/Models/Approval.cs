@@ -48,8 +48,8 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public Transaction Transaction { get; set; }
+        public Transaction? Transaction { get; set; }
 
-        public ICollection<ApprovalDetail> ApprovalDetails { get; set; }
+        public ICollection<ApprovalDetail>? ApprovalDetails { get; set; }
     }
 }

@@ -12,9 +12,9 @@ namespace RentVehiclePool.Controllers
 {
     public class VehiclesController : Controller
     {
-        private readonly RentVehiclePoolContext _context;
+        private readonly AppDbContext _context;
 
-        public VehiclesController(RentVehiclePoolContext context)
+        public VehiclesController(AppDbContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace RentVehiclePool.Controllers
         {
               return _context.Vehicles != null ? 
                           View(await _context.Vehicles.ToListAsync()) :
-                          Problem("Entity set 'RentVehiclePoolContext.Vehicles'  is null.");
+                          Problem("Entity set 'AppDbContent.Vehicles'  is null.");
         }
 
         // GET: Vehicles/Details/5
@@ -148,7 +148,7 @@ namespace RentVehiclePool.Controllers
         {
             if (_context.Vehicles == null)
             {
-                return Problem("Entity set 'RentVehiclePoolContext.Vehicles'  is null.");
+                return Problem("Entity set 'AppDbContent.Vehicles'  is null.");
             }
             var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle != null)

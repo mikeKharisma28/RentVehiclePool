@@ -1,0 +1,59 @@
+﻿@model IEnumerable<RentVehiclePool.Models.ApprovalDetail>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ApprovalNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.ApprovalLevels)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approval.Transaction.Vehicle)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Approval.ApprovalNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Approval.ApprovalLevels)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Approval.Remarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Approval.Status)
+                </td>
+                <td>
+                    @String.Concat(item.Approval.Transaction.Vehicle.Brand, " ", item.Approval.Transaction.Vehicle.Model, " ", item.Approval.Transaction.Vehicle.Year.ToString())
+                </td>
+                <td>
+                    <a asp-action="Approve" asp-route-id="@item.ApprovalDetailId">Approve</a> |
+                    <a asp-action="Reject" asp-route-id="@item.ApprovalDetailId">Reject</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

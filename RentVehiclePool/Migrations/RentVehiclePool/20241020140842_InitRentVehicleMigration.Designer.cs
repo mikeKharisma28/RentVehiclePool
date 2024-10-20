@@ -11,7 +11,7 @@ using RentVehiclePool.Data;
 
 namespace RentVehiclePool.Migrations.RentVehiclePool
 {
-    [DbContext(typeof(RentVehiclePoolContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20241020140842_InitRentVehicleMigration")]
     partial class InitRentVehicleMigration
     {

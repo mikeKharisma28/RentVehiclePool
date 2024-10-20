@@ -1,0 +1,28 @@
+﻿﻿@using Microsoft.AspNetCore.Identity;
+@using RentVehiclePool.Models;
+@inject SignInManager<User> signInManager;
+@inject UserManager<User> userManager;
+@inject RentVehiclePool.Data.AppDbContext appDbContext;
+
+@if (signInManager.IsSignedIn(User))
+{
+    var currentUser = await userManager.GetUserAsync(User);
+    var currentRole = await appDbContext.Roles.FindAsync(currentUser.RoleId);
+    if (currentRole.RoleName == "Admin")
+    {
+        <li>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Transactions" asp-action="Index">Transaction</a>
+        </li>
+        <li>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
+        </li>
+    }
+    else
+    {
+        <a class="nav-link text-dark" asp-area="" asp-controller="Approval" asp-action="Index">Approval</a>
+    }
+}
+else
+{
+    
+}

@@ -43,7 +43,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="UsedDate" class="control-label"></label>
-                <input asp-for="UsedDate" class="form-control" value="@DateTime.Now.ToString()" />
+                <input asp-for="UsedDate" class="form-control" />
                 <span asp-validation-for="UsedDate" class="text-danger"></span>
             </div>
             <div class="mb-3" hidden>
@@ -58,7 +58,7 @@
             </div>
             <div class="mb-3" hidden>
                 <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" value="@ViewBag.CurrentUser" />
+                <input asp-for="CreatedBy" class="form-control" value="-" />
                 @* <span asp-validation-for="CreatedBy" class="text-danger"></span> *@
             </div>
             <div class="mb-3" hidden>
@@ -68,7 +68,7 @@
             </div>
             <div class="mb-3" hidden>
                 <label asp-for="UpdatedBy" class="control-label"></label>
-                <input asp-for="UpdatedBy" class="form-control" value="@ViewBag.CurrentUser" />
+                <input asp-for="UpdatedBy" class="form-control" value="-" />
                 @* <span asp-validation-for="UpdatedBy" class="text-danger"></span> *@
             </div>
             <div class="mb-3">

@@ -15,7 +15,7 @@ namespace RentVehiclePool
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<RentVehiclePoolContext>(options =>
+            builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
             );
 
@@ -50,6 +50,8 @@ namespace RentVehiclePool
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

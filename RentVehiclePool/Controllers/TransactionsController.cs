@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,23 +14,27 @@ namespace RentVehiclePool.Controllers
 {
     public class TransactionsController : Controller
     {
-        private readonly RentVehiclePoolContext _context;
+        private readonly AppDbContext _context;
         private readonly AccountContext _accountContext;
+        private readonly UserManager<User> _userManager;
 
-        public TransactionsController(RentVehiclePoolContext context, AccountContext accountContext)
+        public TransactionsController(AppDbContext context, AccountContext accountContext, UserManager<User> userManager)
         {
             _context = context;
             _accountContext = accountContext;
+            _userManager = userManager;
         }
 
         // GET: Transactions
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var rentVehiclePoolContext = _context.Transactions.Include(t => t.Vehicle);
-            return View(await rentVehiclePoolContext.ToListAsync());
+            var appDbContext = _context.Transactions.Include(t => t.Vehicle);
+            return View(await appDbContext.ToListAsync());
         }
 
         // GET: Transactions/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Transactions == null)
@@ -48,14 +54,16 @@ namespace RentVehiclePool.Controllers
         }
 
         // GET: Transactions/Create
-        public IActionResult Create()
+        [Authorize]
+        public async Task<IActionResult> Create()
         {
-            User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
+            //User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
+            //var currentUser = await _userManager.GetUserAsync(User);
 
-            ViewData["CurrentUser"] = user.FullName;
+            //ViewData["CurrentUser"] = currentUser.FullName;
             ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
             {
-                VehicleId = x.VehicleId,
+                x.VehicleId,
                 Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
             }), "VehicleId", "Name");
             return View();
@@ -72,13 +80,15 @@ namespace RentVehiclePool.Controllers
 
             if (ModelState.IsValid)
             {
-                User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
+                // Getting first record of Approver level 1
+                User approver = _accountContext.Users.FirstOrDefault(x => x.Role.RoleName == "Approval 1");
+                var currentUser = await _userManager.GetUserAsync(User);
 
                 // Update timestamps and user login
                 transaction.CreatedDate = DateTime.Now;
                 transaction.UpdatedDate = DateTime.Now;
-                transaction.CreatedBy = user.FullName;
-                transaction.UpdatedBy = user.FullName;
+                transaction.CreatedBy = currentUser.FullName;
+                transaction.UpdatedBy = currentUser.FullName;
                 //transaction.UsedDate = DateTime.Now;
 
                 Approval approval = new Approval()
@@ -86,41 +96,41 @@ namespace RentVehiclePool.Controllers
                     ApprovalLevels = 2,
                     Remarks = "",
                     Status = "New Request",
-                    ApprovalNo = "X-TESTING",
+                    ApprovalNo = "APV-0123-MIKE",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now,
-                    CreatedBy = user.FullName,
-                    UpdatedBy = user.FullName
+                    CreatedBy = currentUser.FullName,
+                    UpdatedBy = currentUser.FullName
                 };
                 transaction.Approval = approval;
 
                 ApprovalDetail approvalDetail = new ApprovalDetail()
                 {
-                    ApvUserId = user.UserId,
+                    ApvUserId = approver.UserId,
                     Level = 1,
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now,
-                    CreatedBy = user.FullName,
-                    UpdatedBy = user.FullName
+                    CreatedBy = currentUser.FullName,
+                    UpdatedBy = currentUser.FullName
                 };
                 ICollection<ApprovalDetail> approvalDetails = new ApprovalDetail[] { approvalDetail };
                 approval.ApprovalDetails = approvalDetails;
 
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
-                //InsertApprovalData(transaction.TransactionId, transaction.CreatedBy, user.UserId);
 
                 return RedirectToAction(nameof(Index));
             }
             ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
             {
-                VehicleId = x.VehicleId,
+                x.VehicleId,
                 Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
             }), "VehicleId", "Name", transaction.VehicleId);
             return View(transaction);
         }
 
         // GET: Transactions/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Transactions == null)
@@ -135,7 +145,7 @@ namespace RentVehiclePool.Controllers
             }
             ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
             {
-                VehicleId = x.VehicleId,
+                x.VehicleId,
                 Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
             }), "VehicleId", "Name", transaction.VehicleId);
             return View(transaction);
@@ -148,8 +158,6 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TransactionId,VehicleId,TransactionNo,TransactionType,Description,DriverName,Status,UsedDate,ReturnedDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Transaction transaction)
         {
-            DateTime now = DateTime.Now;
-            transaction.UpdatedDate = now;
             if (id != transaction.TransactionId)
             {
                 return NotFound();
@@ -159,6 +167,14 @@ namespace RentVehiclePool.Controllers
             {
                 try
                 {
+                    //User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
+                    var currentUser = await _userManager.GetUserAsync(User);
+
+                    // Update timestamps and user login
+                    transaction.UpdatedDate = DateTime.Now;
+                    transaction.UpdatedBy = currentUser.FullName;
+                    //transaction.UsedDate = DateTime.Now;
+
                     _context.Update(transaction);
                     await _context.SaveChangesAsync();
                 }
@@ -177,7 +193,7 @@ namespace RentVehiclePool.Controllers
             }
             ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
             {
-                VehicleId = x.VehicleId,
+                x.VehicleId,
                 Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
             }), "VehicleId", "Name", transaction.VehicleId);
             return View(transaction);
@@ -209,7 +225,7 @@ namespace RentVehiclePool.Controllers
         {
             if (_context.Transactions == null)
             {
-                return Problem("Entity set 'RentVehiclePoolContext.Transactions'  is null.");
+                return Problem("Entity set 'AppDbContent.Transactions'  is null.");
             }
             var transaction = await _context.Transactions.FindAsync(id);
             if (transaction != null)
@@ -224,49 +240,6 @@ namespace RentVehiclePool.Controllers
         private bool TransactionExists(int id)
         {
           return (_context.Transactions?.Any(e => e.TransactionId == id)).GetValueOrDefault();
-        }
-
-        private async Task UpdateVehicleUsageStatus(int vehicleId, User user, bool isUsed)
-        {
-            // Update vehicle being used
-            Vehicle vehicle = await _context.Vehicles.FirstOrDefaultAsync(x => x.VehicleId == vehicleId);
-            vehicle.IsUsed = true;
-            vehicle.UpdatedDate = DateTime.Now;
-            vehicle.UpdatedBy = user.FullName;
-
-            _context.Update(vehicle);
-            await _context.SaveChangesAsync();
-        }
-
-        private void InsertApprovalData(int transactionId, string currentUser, Guid currentUserId)
-        {
-            // Add approval data
-            Approval approval = new Approval()
-            {
-                ApprovalLevels = 2,
-                Remarks = "",
-                Status = "New Request",
-                ApprovalNo = "X-TESTING",
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now,
-                CreatedBy = currentUser,
-                UpdatedBy = currentUser,
-                TransactionId = transactionId,
-            };
-
-            ApprovalDetail approvalDetail = new ApprovalDetail()
-            {
-                ApvUserId = currentUserId,
-                Level = 1,
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now,
-                CreatedBy = currentUser,
-                UpdatedBy = currentUser
-            };
-
-            approval.ApprovalDetails.Add(approvalDetail);
-            _context.Add(approval);
-            _context.SaveChanges();
         }
     }
 }

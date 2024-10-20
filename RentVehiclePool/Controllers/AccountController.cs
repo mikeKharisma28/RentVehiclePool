@@ -10,15 +10,13 @@ namespace RentVehiclePool.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly RentVehiclePoolContext _context;
-        private readonly AccountContext _accountContext;
+        private readonly AppDbContext _context;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
 
-        public AccountController(RentVehiclePoolContext context, AccountContext accountContext, SignInManager<User> signInManager, UserManager<User> userManager)
+        public AccountController(AppDbContext context, SignInManager<User> signInManager, UserManager<User> userManager)
         {
             _context = context;
-            _accountContext = accountContext;
             _signInManager = signInManager;
             _userManager = userManager;
         }
