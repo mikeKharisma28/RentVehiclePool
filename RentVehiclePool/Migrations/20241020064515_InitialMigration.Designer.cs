@@ -12,7 +12,7 @@ using RentVehiclePool.Data;
 namespace RentVehiclePool.Migrations
 {
     [DbContext(typeof(RentVehiclePoolContext))]
-    [Migration("20241019114107_InitialMigration")]
+    [Migration("20241020064515_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -115,8 +115,6 @@ namespace RentVehiclePool.Migrations
                     b.HasKey("ApprovalDetailId");
 
                     b.HasIndex("ApprovalId");
-
-                    b.HasIndex("ApvUserId");
 
                     b.ToTable("ApprovalDetails", (string)null);
                 });
@@ -353,21 +351,13 @@ namespace RentVehiclePool.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentVehiclePool.Models.User", "ApvUser")
-                        .WithMany("ApprovalDetails")
-                        .HasForeignKey("ApvUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Approval");
-
-                    b.Navigation("ApvUser");
                 });
 
             modelBuilder.Entity("RentVehiclePool.Models.Transaction", b =>
                 {
                     b.HasOne("RentVehiclePool.Models.Vehicle", "Vehicle")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -378,7 +368,7 @@ namespace RentVehiclePool.Migrations
             modelBuilder.Entity("RentVehiclePool.Models.User", b =>
                 {
                     b.HasOne("RentVehiclePool.Models.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -389,21 +379,6 @@ namespace RentVehiclePool.Migrations
             modelBuilder.Entity("RentVehiclePool.Models.Approval", b =>
                 {
                     b.Navigation("ApprovalDetails");
-                });
-
-            modelBuilder.Entity("RentVehiclePool.Models.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("RentVehiclePool.Models.User", b =>
-                {
-                    b.Navigation("ApprovalDetails");
-                });
-
-            modelBuilder.Entity("RentVehiclePool.Models.Vehicle", b =>
-                {
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

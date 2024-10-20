@@ -48,7 +48,7 @@ namespace RentVehiclePool.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "CreatedBy");
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleName");
             return View();
         }
 
@@ -59,13 +59,16 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,UserLogin,FirstName,MiddleName,LastName,RoleId,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] User user)
         {
+            DateTime now = DateTime.Now;
+            user.CreatedDate = now;
+            user.UpdatedDate = now;
             if (ModelState.IsValid)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "CreatedBy", user.RoleId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleName", user.RoleId);
             return View(user);
         }
 
@@ -82,7 +85,7 @@ namespace RentVehiclePool.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "CreatedBy", user.RoleId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleName", user.RoleId);
             return View(user);
         }
 
@@ -93,6 +96,8 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,UserLogin,FirstName,MiddleName,LastName,RoleId,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] User user)
         {
+            DateTime now = DateTime.Now;
+            user.UpdatedDate = now;
             if (id != user.UserId)
             {
                 return NotFound();
@@ -118,7 +123,7 @@ namespace RentVehiclePool.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "CreatedBy", user.RoleId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleName", user.RoleId);
             return View(user);
         }
 

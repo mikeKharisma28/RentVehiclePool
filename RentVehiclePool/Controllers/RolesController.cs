@@ -58,6 +58,9 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleId,RoleName,Description,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Role role)
         {
+            DateTime now = DateTime.Now;
+            role.CreatedDate = now;
+            role.UpdatedDate = now;
             if (ModelState.IsValid)
             {
                 _context.Add(role);
@@ -90,6 +93,8 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleName,Description,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Role role)
         {
+            DateTime now = DateTime.Now;
+            role.UpdatedDate = now;
             if (id != role.RoleId)
             {
                 return NotFound();

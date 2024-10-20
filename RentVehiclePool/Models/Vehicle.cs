@@ -51,6 +51,6 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public ICollection<Transaction> Transactions { get; set; }
+        //public ICollection<Transaction> Transactions { get; set; }
     }
 }

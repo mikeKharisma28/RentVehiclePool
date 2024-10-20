@@ -20,7 +20,7 @@ namespace RentVehiclePool.Models
 
         [Display(Name = "Middle Name")]
         [StringLength(50)]
-        public string MiddleName { get; set; }
+        public string? MiddleName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
@@ -55,8 +55,8 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
 
-        public ICollection<ApprovalDetail> ApprovalDetails { get; set; }
+        //public ICollection<ApprovalDetail> ApprovalDetails { get; set; }
     }
 }

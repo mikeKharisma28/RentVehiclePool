@@ -58,6 +58,9 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VehicleId,Brand,Model,LicensePlate,Year,IsUsed,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Vehicle vehicle)
         {
+            DateTime now = DateTime.Now;
+            vehicle.CreatedDate = now;
+            vehicle.UpdatedDate = now;
             if (ModelState.IsValid)
             {
                 _context.Add(vehicle);
@@ -90,6 +93,8 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("VehicleId,Brand,Model,LicensePlate,Year,IsUsed,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Vehicle vehicle)
         {
+            DateTime now = DateTime.Now;
+            vehicle.UpdatedDate = now;
             if (id != vehicle.VehicleId)
             {
                 return NotFound();

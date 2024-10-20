@@ -31,5 +31,110 @@ namespace RentVehiclePool.Data
             modelBuilder.Entity<Approval>().ToTable("Approvals");
             modelBuilder.Entity<ApprovalDetail>().ToTable("ApprovalDetails");
         }
+
+        //public override int SaveChanges()
+        //{
+        //    DateTime now = DateTime.Now;
+        //    AutoCreatedDate(now);
+        //    AutoUpdatedDate(now);
+
+        //    return base.SaveChanges();
+        //}
+
+        //private void AutoCreatedDate(DateTime time)
+        //{
+        //    foreach (var entity in ChangeTracker.Entries<User>()
+        //            .Where(e => e.State == EntityState.Added)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.CreatedDate = time;
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Role>()
+        //            .Where(e => e.State == EntityState.Added)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.CreatedDate = time;
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Vehicle>()
+        //            .Where(e => e.State == EntityState.Added)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.CreatedDate = time;
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Transaction>()
+        //            .Where(e => e.State == EntityState.Added)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.CreatedDate = time;
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Approval>()
+        //            .Where(e => e.State == EntityState.Added)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.CreatedDate = time;
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<ApprovalDetail>()
+        //            .Where(e => e.State == EntityState.Added)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.CreatedDate = time;
+        //        entity.UpdatedDate = time;
+        //    }
+        //}
+
+        //private void AutoUpdatedDate(DateTime time)
+        //{
+        //    foreach (var entity in ChangeTracker.Entries<User>()
+        //            .Where(e => e.State == EntityState.Modified)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Role>()
+        //            .Where(e => e.State == EntityState.Modified)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Vehicle>()
+        //            .Where(e => e.State == EntityState.Modified)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Transaction>()
+        //            .Where(e => e.State == EntityState.Modified)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<Approval>()
+        //            .Where(e => e.State == EntityState.Modified)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.UpdatedDate = time;
+        //    }
+
+        //    foreach (var entity in ChangeTracker.Entries<ApprovalDetail>()
+        //            .Where(e => e.State == EntityState.Modified)
+        //            .Select(e => e.Entity))
+        //    {
+        //        entity.UpdatedDate = time;
+        //    }
+        //}
     }
 }

@@ -44,6 +44,6 @@ namespace RentVehiclePool.Models
 
         public Approval Approval { get; set; }
 
-        public User ApvUser { get; set; }
+        //public User ApvUser { get; set; }
     }
 }

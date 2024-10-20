@@ -48,7 +48,11 @@ namespace RentVehiclePool.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Brand");
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
+            {
+                VehicleId = x.VehicleId,
+                Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
+            }), "VehicleId", "Name");
             return View();
         }
 
@@ -59,13 +63,20 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TransactionId,VehicleId,TransactionNo,TransactionType,Description,DriverName,Status,UsedDate,ReturnedDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Transaction transaction)
         {
+            DateTime now = DateTime.Now;
+            transaction.CreatedDate = now;
+            transaction.UpdatedDate = now;
             if (ModelState.IsValid)
             {
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Brand", transaction.VehicleId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
+            {
+                VehicleId = x.VehicleId,
+                Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
+            }), "VehicleId", "Name", transaction.VehicleId);
             return View(transaction);
         }
 
@@ -82,7 +93,11 @@ namespace RentVehiclePool.Controllers
             {
                 return NotFound();
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Brand", transaction.VehicleId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
+            {
+                VehicleId = x.VehicleId,
+                Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
+            }), "VehicleId", "Name", transaction.VehicleId);
             return View(transaction);
         }
 
@@ -93,6 +108,8 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TransactionId,VehicleId,TransactionNo,TransactionType,Description,DriverName,Status,UsedDate,ReturnedDate,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Transaction transaction)
         {
+            DateTime now = DateTime.Now;
+            transaction.UpdatedDate = now;
             if (id != transaction.TransactionId)
             {
                 return NotFound();
@@ -118,7 +135,11 @@ namespace RentVehiclePool.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "Brand", transaction.VehicleId);
+            ViewData["VehicleId"] = new SelectList(_context.Vehicles.Select(x => new
+            {
+                VehicleId = x.VehicleId,
+                Name = x.Brand + " " + x.Model + " " + x.Year.ToString(),
+            }), "VehicleId", "Name", transaction.VehicleId);
             return View(transaction);
         }
 

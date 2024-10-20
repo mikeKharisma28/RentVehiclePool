@@ -38,6 +38,6 @@ namespace RentVehiclePool.Models
         public string UpdatedBy { get; set; }
 
 
-        public ICollection<User> Users { get; set; }
+        //public ICollection<User> Users { get; set; }
     }
 }

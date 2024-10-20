@@ -161,23 +161,12 @@ namespace RentVehiclePool.Migrations
                         principalTable: "Approvals",
                         principalColumn: "ApprovalId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApprovalDetails_Users_ApvUserId",
-                        column: x => x.ApvUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApprovalDetails_ApprovalId",
                 table: "ApprovalDetails",
                 column: "ApprovalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApprovalDetails_ApvUserId",
-                table: "ApprovalDetails",
-                column: "ApvUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Approvals_TransactionId",
@@ -202,16 +191,16 @@ namespace RentVehiclePool.Migrations
                 name: "ApprovalDetails");
 
             migrationBuilder.DropTable(
-                name: "Approvals");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "Approvals");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
