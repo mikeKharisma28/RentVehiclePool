@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RentVehiclePool.Migrations.Account
 {
     /// <inheritdoc />
-    public partial class InitAccountMigration : Migration
+    public partial class InitAccountTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

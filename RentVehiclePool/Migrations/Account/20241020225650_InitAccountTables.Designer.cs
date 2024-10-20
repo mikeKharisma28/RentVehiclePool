@@ -12,8 +12,8 @@ using RentVehiclePool.Data;
 namespace RentVehiclePool.Migrations.Account
 {
     [DbContext(typeof(AccountContext))]
-    [Migration("20241020140754_InitAccountMigration")]
-    partial class InitAccountMigration
+    [Migration("20241020225650_InitAccountTables")]
+    partial class InitAccountTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

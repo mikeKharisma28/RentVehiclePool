@@ -8,10 +8,10 @@ using RentVehiclePool.Data;
 
 #nullable disable
 
-namespace RentVehiclePool.Migrations.RentVehiclePool
+namespace RentVehiclePool.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
-    partial class RentVehiclePoolContextModelSnapshot : ModelSnapshot
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -67,7 +67,8 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
 
                     b.HasKey("ApprovalId");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.ToTable("Approvals", (string)null);
                 });
@@ -95,7 +96,6 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
                         .HasColumnType("datetime2");
 
                     b.Property<bool?>("IsApproved")
-                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<int>("Level")
@@ -160,34 +160,34 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
                         {
                             RoleId = 1,
                             CreatedBy = "EF Migration",
-                            CreatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(29),
+                            CreatedDate = new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3734),
                             Description = "Dapat melakukan transaksi untuk sewa / pengambilan kendaraan.",
                             IsActive = true,
                             RoleName = "Admin",
                             UpdatedBy = "EF Migration",
-                            UpdatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(38)
+                            UpdatedDate = new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3743)
                         },
                         new
                         {
                             RoleId = 2,
                             CreatedBy = "EF Migration",
-                            CreatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(53),
+                            CreatedDate = new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3758),
                             Description = "Melakukan approval level 1",
                             IsActive = true,
                             RoleName = "Approval 1",
                             UpdatedBy = "EF Migration",
-                            UpdatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(54)
+                            UpdatedDate = new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3759)
                         },
                         new
                         {
                             RoleId = 3,
                             CreatedBy = "EF Migration",
-                            CreatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(61),
+                            CreatedDate = new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3765),
                             Description = "Melakukan approval level 2",
                             IsActive = true,
                             RoleName = "Approval 2",
                             UpdatedBy = "EF Migration",
-                            UpdatedDate = new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(61)
+                            UpdatedDate = new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3765)
                         });
                 });
 
@@ -256,9 +256,8 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
 
             modelBuilder.Entity("RentVehiclePool.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -284,9 +283,6 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -329,10 +325,13 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
@@ -395,8 +394,8 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
             modelBuilder.Entity("RentVehiclePool.Models.Approval", b =>
                 {
                     b.HasOne("RentVehiclePool.Models.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionId")
+                        .WithOne("Approval")
+                        .HasForeignKey("RentVehiclePool.Models.Approval", "TransactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -439,6 +438,11 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
             modelBuilder.Entity("RentVehiclePool.Models.Approval", b =>
                 {
                     b.Navigation("ApprovalDetails");
+                });
+
+            modelBuilder.Entity("RentVehiclePool.Models.Transaction", b =>
+                {
+                    b.Navigation("Approval");
                 });
 #pragma warning restore 612, 618
         }

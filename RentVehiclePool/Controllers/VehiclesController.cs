@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,12 @@ namespace RentVehiclePool.Controllers
     public class VehiclesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public VehiclesController(AppDbContext context)
+        public VehiclesController(AppDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Vehicles
@@ -58,9 +61,11 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VehicleId,Brand,Model,LicensePlate,Year,IsUsed,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Vehicle vehicle)
         {
-            DateTime now = DateTime.Now;
-            vehicle.CreatedDate = now;
-            vehicle.UpdatedDate = now;
+            var currentUser = await _userManager.GetUserAsync(User);
+            vehicle.CreatedDate = DateTime.Now;
+            vehicle.CreatedBy = currentUser.FullName;
+            vehicle.UpdatedDate = DateTime.Now;
+            vehicle.UpdatedBy = currentUser.FullName;
             if (ModelState.IsValid)
             {
                 _context.Add(vehicle);
@@ -93,8 +98,9 @@ namespace RentVehiclePool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("VehicleId,Brand,Model,LicensePlate,Year,IsUsed,IsActive,CreatedDate,CreatedBy,UpdatedDate,UpdatedBy")] Vehicle vehicle)
         {
-            DateTime now = DateTime.Now;
-            vehicle.UpdatedDate = now;
+            var currentUser = await _userManager.GetUserAsync(User);
+            vehicle.UpdatedDate = DateTime.Now;
+            vehicle.UpdatedBy = currentUser.FullName;
             if (id != vehicle.VehicleId)
             {
                 return NotFound();

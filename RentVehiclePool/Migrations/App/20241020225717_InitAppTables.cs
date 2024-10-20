@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace RentVehiclePool.Migrations.RentVehiclePool
+namespace RentVehiclePool.Migrations.App
 {
     /// <inheritdoc />
-    public partial class InitRentVehicleMigration : Migration
+    public partial class InitAppTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,6 +58,7 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
             //    name: "Users",
             //    columns: table => new
             //    {
+            //        Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
             //        UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
             //        FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
             //        RoleId = table.Column<int>(type: "int", nullable: false),
@@ -66,7 +67,6 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
             //        CreatedBy = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
             //        UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
             //        UpdatedBy = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-            //        Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
             //        UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
             //        NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
             //        Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -84,7 +84,7 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
             //    },
             //    constraints: table =>
             //    {
-            //        table.PrimaryKey("PK_Users", x => x.UserId);
+            //        table.PrimaryKey("PK_Users", x => x.Id);
             //        table.ForeignKey(
             //            name: "FK_Users_Roles_RoleId",
             //            column: x => x.RoleId,
@@ -159,7 +159,7 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
                     ApprovalId = table.Column<int>(type: "int", nullable: false),
                     ApvUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -181,9 +181,9 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
                 columns: new[] { "RoleId", "CreatedBy", "CreatedDate", "Description", "IsActive", "RoleName", "UpdatedBy", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, "EF Migration", new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(29), "Dapat melakukan transaksi untuk sewa / pengambilan kendaraan.", true, "Admin", "EF Migration", new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(38) },
-                    { 2, "EF Migration", new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(53), "Melakukan approval level 1", true, "Approval 1", "EF Migration", new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(54) },
-                    { 3, "EF Migration", new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(61), "Melakukan approval level 2", true, "Approval 2", "EF Migration", new DateTime(2024, 10, 20, 21, 8, 42, 263, DateTimeKind.Local).AddTicks(61) }
+                    { 1, "EF Migration", new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3734), "Dapat melakukan transaksi untuk sewa / pengambilan kendaraan.", true, "Admin", "EF Migration", new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3743) },
+                    { 2, "EF Migration", new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3758), "Melakukan approval level 1", true, "Approval 1", "EF Migration", new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3759) },
+                    { 3, "EF Migration", new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3765), "Melakukan approval level 2", true, "Approval 2", "EF Migration", new DateTime(2024, 10, 21, 5, 57, 17, 224, DateTimeKind.Local).AddTicks(3765) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -194,7 +194,8 @@ namespace RentVehiclePool.Migrations.RentVehiclePool
             migrationBuilder.CreateIndex(
                 name: "IX_Approvals_TransactionId",
                 table: "Approvals",
-                column: "TransactionId");
+                column: "TransactionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_VehicleId",
