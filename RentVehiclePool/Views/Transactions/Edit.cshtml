@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="TransactionId" />
             <div class="mb-2">
                 <label asp-for="VehicleId" class="control-label"></label>
-                <select asp-for="VehicleId" class="form-control" asp-items="ViewBag.VehicleId" ></select>
+                <select asp-for="VehicleId" class="form-control" asp-items="ViewBag.VehicleId" readonly ></select>
                 <span asp-validation-for="VehicleId" class="text-danger"></span>
             </div>
             <div class="mb-2">

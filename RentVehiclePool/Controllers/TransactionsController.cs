@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -169,10 +170,14 @@ namespace RentVehiclePool.Controllers
                 {
                     //User user = _accountContext.Users.FirstOrDefault(x => x.UserName == "mike@abc.com");
                     var currentUser = await _userManager.GetUserAsync(User);
+                    var vehicle = await _context.Vehicles.FindAsync(transaction.VehicleId);
 
                     // Update timestamps and user login
                     transaction.UpdatedDate = DateTime.Now;
                     transaction.UpdatedBy = currentUser.FullName;
+                    vehicle.IsUsed = false;
+                    vehicle.UpdatedDate = DateTime.Now;
+                    vehicle.UpdatedBy = currentUser.FullName;
                     //transaction.UsedDate = DateTime.Now;
 
                     _context.Update(transaction);
@@ -200,41 +205,47 @@ namespace RentVehiclePool.Controllers
         }
 
         // GET: Transactions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null || _context.Transactions == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var transaction = await _context.Transactions
+        //        .Include(t => t.Vehicle)
+        //        .FirstOrDefaultAsync(m => m.TransactionId == id);
+        //    if (transaction == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(transaction);
+        //}
+
+        //// POST: Transactions/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (_context.Transactions == null)
+        //    {
+        //        return Problem("Entity set 'AppDbContent.Transactions'  is null.");
+        //    }
+        //    var transaction = await _context.Transactions.FindAsync(id);
+        //    if (transaction != null)
+        //    {
+        //        _context.Transactions.Remove(transaction);
+        //    }
+
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+        [HttpPost]
+        public FileResult ExportToExcel(string htmlTable)
         {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
-
-            var transaction = await _context.Transactions
-                .Include(t => t.Vehicle)
-                .FirstOrDefaultAsync(m => m.TransactionId == id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            return View(transaction);
-        }
-
-        // POST: Transactions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Transactions == null)
-            {
-                return Problem("Entity set 'AppDbContent.Transactions'  is null.");
-            }
-            var transaction = await _context.Transactions.FindAsync(id);
-            if (transaction != null)
-            {
-                _context.Transactions.Remove(transaction);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return File(Encoding.ASCII.GetBytes(htmlTable), "application/vnd.ms-excel", "Transactions.xls");
         }
 
         private bool TransactionExists(int id)
