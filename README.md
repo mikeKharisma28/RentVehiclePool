@@ -1,5 +1,5 @@
-Here is the steps to run this project. I also include the activity diagram, here below. 
-![image](https://drive.google.com/file/d/1YOXSjXuBMKIACjx0a48LX1UQV30WHuMZ/view?usp=sharing)
+Here is the steps to run this project. I also include the activity diagram, in this link below. 
+https://drive.google.com/file/d/1YOXSjXuBMKIACjx0a48LX1UQV30WHuMZ/view?usp=sharing
 
 1. This project is created using Visual Studio 2022, .NET Core 6 using MVC architecture, SQL Server 2022 Developer edition.
 2. It also uses EntityFrameworkCore 7.0.20, because version 8 and above are not supported in .NET Core 6.
