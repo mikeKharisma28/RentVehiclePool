@@ -9,11 +9,6 @@ https://drive.google.com/file/d/1YOXSjXuBMKIACjx0a48LX1UQV30WHuMZ/view?usp=shari
 6. Change appsettings.json for ConnectionString if necessary.
 7. Then open Package Manager Console
    ![image](https://github.com/user-attachments/assets/cb1767e8-0b59-453e-a643-99ab4556b4ad)
-8. This project has 2 DB contexts. Make sure to execute the commands for deploying data in orderly fashion and configure ConnectionString correctly in your machine.
-9. Execute command Update-Database -Context AccountContext, for deploying tables related to Users and Roles.
-10. Then execute command Update-Database -Context AppDbContext, for deploying the rest of the tables and initial values for table Roles.
-11. This project is provided with the feature of Login and Registration page. You can create your own.
-12. There are 3 roles, Admin, Approver 1 and Approver 2. Before testing, make sure you have registered users with these roles.
-13. Role Admin has access to updating vehicle data and input the transaction. After a transaction is submitted, the data will need to be approved by Approver 1 and 2.
-14. Role Approver 1 & 2 has access to approving the transaction data. Once approve / reject, the task will not be present in the list anymore.
-15. Hence, the project is ready to be tested. 
+9. Execute command Update-Database to migrate to your database.
+10. This project is provided with 2 modules Employee and Positions.
+11. Hence, the project is ready to be tested. 
